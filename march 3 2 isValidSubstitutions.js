@@ -1,3 +1,5 @@
+// https://leetcode.com/contest/weekly-contest-126/problems/check-if-word-is-valid-after-substitutions/
+
 /**
  * @param {string} S
  * @return {boolean}

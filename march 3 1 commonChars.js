@@ -1,3 +1,5 @@
+// https://leetcode.com/contest/weekly-contest-126/problems/find-common-characters/
+
 /**
  * @param {string[]} A
  * @return {string[]}
