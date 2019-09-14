@@ -3,7 +3,7 @@
  * @param {number[][]} queries
  * @return {boolean[]}
  */
-var canMakePaliQueries = function(s, queries) {
+var canMakePaliQueries = function (s, queries) {
   let ans = [];
   const cf = {};
   // 'b'.charCodeAt(0) - 97
