@@ -2,44 +2,24 @@
  * @param {number[]} arr
  * @return {number}
  */
-var maximumSum = function (arr) {
-  let currSum = []
-  for (let index = 0; index < arr.length; index++) {
-    const element = arr[index];
-    currSum.push([index, element]);
-  }
-  let minTracker = [];
-  for (let index = 0; index < currSum.length; index++) {
-    const element = currSum[index];
-    minTracker[index] = element[1];
-  }
-  console.log(minTracker);
-
-  let max = Math.max(...arr);
-  for (let currCount = 2; currCount <= arr.length; currCount++) {
-    let nextSum = [];
-    // console.log("TCL: currCount", currCount)
-    for (let i = 0; i < arr.length - currCount + 1; i++) {
-      // console.log(currSum);
-      const [index, element] = currSum[i];
-      let toAddIndex = currCount - 1 + index;
-      // console.log("TCL: toAddIndex", toAddIndex)
-      if (arr[toAddIndex] < minTracker[index]) {
-        minTracker[index] = arr[toAddIndex];
-      }
-      // console.log("TCL: index", index)
-      // console.log("TCL: toAddIndex", toAddIndex)
-      // console.log("TCL: arr[toAddIndex]", arr[toAddIndex])
-      // console.log("TCL: currSum[index]", currSum[index])
-      nextSum.push([index, element + arr[toAddIndex]]);
-      // console.log("TCL: currSum[index]", currSum[index])
-      let maxSum = minTracker[index] < 0 ? element + arr[toAddIndex] - minTracker[index] : element + arr[toAddIndex];
-      if (maxSum > max) {
-        max = maxSum;
-      }
+var maximumSum = function(arr) {
+  const dp = [[arr[0], arr[0]]];
+  let max = arr[0];
+  for (let index = 1; index < arr.length; index++) {
+    const num = arr[index];
+    dp[index] = [];
+    dp[index][0] = dp[index - 1][0] > 0 ? dp[index - 1][0] + num : num;
+    if (dp[index][0] > max) {
+      max = dp[index][0];
     }
-    currSum = nextSum;
+    const removeCurrent = dp[index - 1][0] > 0 ? dp[index][0] - num : num;
+    const removePrevious = dp[index - 1][1] + num;
+    dp[index][1] = Math.max(removeCurrent, removePrevious);
+    if (dp[index][1] > max) {
+      max = dp[index][1];
+    }
   }
+  // console.log(dp);
 
   return max;
 };
