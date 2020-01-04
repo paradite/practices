@@ -37,6 +37,7 @@ var countSquares = function(matrix) {
         let sides = 0;
         if (i + 1 < matrix.length && j + 1 < matrix[0].length) {
           sides = dpSides[i + 1][j + 1];
+          console.log('TCL: dpSides', dpSides);
         }
         if (hasBottom) {
           sides = sides + matrix[i + k - 1][j];
@@ -56,15 +57,16 @@ var countSquares = function(matrix) {
     }
     dp = newdp;
     dpSides = newdpSides;
+    // console.log('TCL: newdpSides', newdpSides);
     // console.log('TCL: dp', dp);
   }
   return ans;
 };
 
 console.log(countSquares([[0, 1, 1, 1], [1, 1, 1, 1], [0, 1, 1, 1]]));
-console.log(countSquares([[1, 0, 1], [1, 1, 0], [1, 1, 0]]));
-console.log(countSquares([[1, 1, 0, 0, 1], [1, 0, 1, 1, 1], [1, 1, 1, 1, 1], [1, 0, 1, 0, 1], [0, 0, 1, 0, 1]]));
-console.log(countSquares([[0, 1, 1, 1], [1, 1, 1, 1], [0, 1, 1, 1]]));
+// console.log(countSquares([[1, 0, 1], [1, 1, 0], [1, 1, 0]]));
+// console.log(countSquares([[1, 1, 0, 0, 1], [1, 0, 1, 1, 1], [1, 1, 1, 1, 1], [1, 0, 1, 0, 1], [0, 0, 1, 0, 1]]));
+// console.log(countSquares([[0, 1, 1, 1], [1, 1, 1, 1], [0, 1, 1, 1]]));
 // [1,1,0,0,1],
 // [1,0,1,1,1]
 // [1,1,1,1,1]
