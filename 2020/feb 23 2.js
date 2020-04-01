@@ -5,32 +5,34 @@
  * @return {boolean}
  */
 var validateBinaryTreeNodes = function(n, leftChild, rightChild) {
-  // map of parent
-  const map = {};
+  const parentMap = {};
   for (let i = 0; i < n; i++) {
-    // console.log('TCL: map', map);
     const left = leftChild[i];
     const right = rightChild[i];
-    if (map[i] === left || map[i] === right) {
-      return false;
-    }
-    if (map[left] || map[right]) {
-      return false;
-    }
+    // self loop
+    if (i === left || i === right) return false;
+    // loop
+    if (parentMap[i] === left || parentMap[i] === right) return false;
+    // not tree
+    if (parentMap[left] || parentMap[right]) return false;
     if (left !== -1) {
-      map[left] = i;
+      parentMap[left] = i;
     }
     if (right !== -1) {
-      map[right] = i;
+      parentMap[right] = i;
     }
   }
-  console.log('TCL: map', map);
-  const m = Object.entries(map).length;
-  // console.log('TCL: m', m);
+  const m = Object.entries(parentMap).length;
+  // one connected tree
   return m === n - 1;
 };
 
-console.log(validateBinaryTreeNodes(4, [1, -1, 3, -1], [2, -1, -1, -1]));
-console.log(validateBinaryTreeNodes(4, [1, -1, 3, -1], [2, 3, -1, -1]));
-console.log(validateBinaryTreeNodes(2, [1, 0], [-1, -1]));
-console.log(validateBinaryTreeNodes(6, [1, -1, -1, 4, -1, -1], [2, -1, -1, 5, -1, -1]));
+console.log(validateBinaryTreeNodes(3, [2, 1, -1], [-1, -1, -1]));
+console.log(validateBinaryTreeNodes(3, [1, 0, -1], [-1, -1, -1]));
+console.log(validateBinaryTreeNodes(4, [1, -1, -1, -1], [2, -1, -1, -1]));
+console.log(validateBinaryTreeNodes(4, [1, -1, 3, -1], [-1, -1, -1, 2]));
+console.log(validateBinaryTreeNodes(3, [2, 0, -1], [-1, -1, -1]));
+// console.log(validateBinaryTreeNodes(4, [1, -1, 3, -1], [2, -1, -1, -1]));
+// console.log(validateBinaryTreeNodes(4, [1, -1, 3, -1], [2, 3, -1, -1]));
+// console.log(validateBinaryTreeNodes(2, [1, 0], [-1, -1]));
+// console.log(validateBinaryTreeNodes(6, [1, -1, -1, 4, -1, -1], [2, -1, -1, 5, -1, -1]));
