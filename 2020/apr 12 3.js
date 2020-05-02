@@ -16,3 +16,4 @@ console.log(entityParser('Stay home! Practice on Leetcode :)'));
 console.log(entityParser('x &gt; y &amp;&amp; x &lt; y is always false'));
 console.log(entityParser('leetcode.com&frasl;problemset&frasl;all'));
 console.log(entityParser(' &frasl; &quot; &apos; ZooP)x:6~'));
+console.log(entityParser('&amp;gt;'));

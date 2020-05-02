@@ -9,6 +9,8 @@ Array.prototype.remove = function(val) {
   return this;
 };
 
+const mod = Math.pow(10, 9) + 7;
+
 const arr = [1, 2, 3, 3, 4];
 arr.remove(3);
 arr.remove(3);
