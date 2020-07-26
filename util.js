@@ -1,7 +1,12 @@
 const _ = require('lodash');
 
+// prettier-ignore
+if (typeof _ === 'undefined') {
+  _ = require('lodash');
+}
+
 // Remove
-Array.prototype.remove = function(val) {
+Array.prototype.remove = function (val) {
   const index = this.indexOf(val);
   if (index > -1) {
     this.splice(index, 1);
@@ -30,7 +35,7 @@ const meetings = [
   [2, 5],
   [1, 5],
   [0, 10],
-  [0, 5]
+  [0, 5],
 ];
 const sortedMeetings = _.sortBy(meetings, [1, 0]);
 console.log('TCL: sortedMeetings', sortedMeetings);
