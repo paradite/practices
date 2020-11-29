@@ -39,3 +39,7 @@ const meetings = [
 ];
 const sortedMeetings = _.sortBy(meetings, [1, 0]);
 console.log('TCL: sortedMeetings', sortedMeetings);
+
+// set equal
+isSetsEqual = (a, b) =>
+  a.size === b.size && [...a].every((value) => b.has(value));
