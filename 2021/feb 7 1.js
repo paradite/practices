@@ -34,3 +34,23 @@ const mod = Math.pow(10, 9) + 7;
 // set equal
 const isSetsEqual = (a, b) =>
   a.size === b.size && [...a].every((value) => b.has(value));
+
+/**
+ * @param {number[]} nums
+ * @return {boolean}
+ */
+var check = function (nums) {
+  let inflection = false;
+  for (let i = 1; i < nums.length; i++) {
+    if (nums[i] >= nums[i - 1]) {
+      continue;
+    } else {
+      if (inflection) return false;
+      inflection = true;
+    }
+  }
+  if (inflection) {
+    return nums[nums.length - 1] <= nums[0];
+  }
+  return true;
+};
