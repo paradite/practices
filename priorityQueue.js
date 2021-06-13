@@ -103,4 +103,61 @@ BinaryHeap.prototype = {
     this.content[n][this.valueProp] = value;
     this.bubbleUp(n);
   },
+
+  peak: function () {
+    return this.content[0];
+  },
 };
+
+// tests
+
+const minHeap = new BinaryHeap(
+  (a) => a.value,
+  (a) => {
+    return a.id;
+  },
+  'value'
+);
+
+minHeap.push({
+  id: 1,
+  value: 1,
+});
+
+minHeap.push({
+  id: 2,
+  value: 1000,
+});
+
+minHeap.push({
+  id: 3,
+  value: 2,
+});
+
+minHeap.push({
+  id: 4,
+  value: 200,
+});
+
+while (minHeap.peak()) {
+  console.log(minHeap.pop());
+}
+
+const minHeap2 = new BinaryHeap(
+  (a) => a[0],
+  (a) => {
+    return a[1];
+  },
+  '0'
+);
+
+minHeap2.push([1000, 1]);
+minHeap2.push([4, 2]);
+minHeap2.push([200, 3]);
+minHeap2.decreaseKey(3, 2);
+minHeap2.push([1, 4]);
+minHeap2.push([254, 5]);
+
+while (minHeap2.peak()) {
+  console.log(minHeap2.pop());
+}
