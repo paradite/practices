@@ -1,0 +1,77 @@
+/**
+ * @param {string} word
+ * @return {number}
+ */
+var wonderfulSubstrings = function (word) {
+  const dp = [];
+  for (let i = 0; i < 10; i++) {
+    dp.push([]);
+  }
+  for (let i = 0; i < word.length; i++) {
+    const element = word[i];
+    for (let j = 0; j < 10; j++) {
+      if (element.charCodeAt(0) - 97 === j) {
+        dp[j][i] = dp[j][i - 1] >= 0 ? dp[j][i - 1] + 1 : 1;
+      } else {
+        dp[j][i] = dp[j][i - 1] >= 0 ? dp[j][i - 1] : 0;
+      }
+    }
+  }
+  // console.log('TCL ~ dp', dp);
+
+  const getValue = (pos, pre) => {
+    if (pos === pre) return 1;
+    let validCount = 0;
+    for (let i = 0; i < dp.length; i++) {
+      const count = dp[i][pos] - (dp[i][pre] ? dp[i][pre] : 0);
+      if (count % 2 === 1) validCount++;
+    }
+    return validCount;
+  };
+
+  const recurse = (target, start, end, pre) => {
+    if (start > end) {
+      return currMax ? currMax : -1;
+    }
+    const mid = Math.ceil((start + end) / 2);
+    const midValue = getValue(mid, pre);
+    // console.log('TCL ~ mid midValue', mid, midValue);
+    if (midValue <= target) {
+      if (!currMax || mid < currMax) {
+        currMax = mid;
+      }
+      return recurse(target, mid + 1, end);
+    } else if (midValue > target) {
+      return recurse(target, start, mid - 1);
+    } else {
+      return mid;
+    }
+  };
+
+  let total = 0;
+  let currMax = 0;
+  for (let i = 0; i < word.length; i++) {
+    let curr = 0;
+    for (let j = i; j < word.length; j++) {
+      const count = getValue(j, i - 1);
+      // console.log('TCL ~ i,j,count', i, j, count);
+      if (count <= 1) {
+        curr++;
+      }
+    }
+    // recurse(1, i, word.length - 1, i);
+    // console.log('TCL ~ i currMax', i, currMax);
+    // total += currMax;
+    total += curr;
+  }
+  return total;
+};
+
+console.log(wonderfulSubstrings('aba'));
+console.log(wonderfulSubstrings('aabb'));
+console.log(wonderfulSubstrings('he'));
+console.log(
+  wonderfulSubstrings(
+    'ihgchcaeaiedbhcihjaifihfjhgafiejbbjhiiaajcejbibdcghhcichdbcccbadegeihhbjfhfgggajiafabceedjdaejhagabjdifehjfichjgedegcaajajdbaccjhdaaccgajchgegffigjaicadfgfahicjjcajjafahehhfecffjjjdgaagfagfaefcegjighbbacjedcjcjhefdihddjbiaidjejgfhbbacefdcgibabihhfeeaaahhchigafafacgigbjdghjejceehacigfghecjichbcajiacefciiffdddhifgbeeiffhbfbggaaibeajjicfiebeddhacffhhgeagbgececcbddfcjacdjeeabcabcijeaicahgijgcaeicfjhfahjajjbceiddifagjecbefgfcghhhdicdiefdjdfhgdihabfcdbcfgajghhhjdbgcabaigigbadfbabhhjhdbdegicahbgedaeefjacjeaegbgaicdbbjgjiiiaefabjchafcdeibdfehbcgbheaagfhfdbiagjjegdajgidifahfbdaiaifhgegefbbjiaghgdiaejiibdagdhifcghgfihegbaacffgaedeihdcajacgjhejdedaagjggjjiaedcfchbbiaeeibajdjfaciibdbeghbbgfjeifbfbjciefgdfjahbacaejaibcfbccbgebajcegcfaigfibddhjijbihcaaafdagjfbbfcijfdgiebghaahdaehbjdggfbidhehaicfadfbfgafjabgabfabaeddbfajhjijajcjbeeefehgcfdijhifcgiaejgcagijjibceahggibadghacdiabaedidgfjaggjgghbgidbfgafghadjejediibdgjdidefbbiaecjeicehihicdaaiahjibeiehdfidbhbhfaihhgfdccejgheifbjdbfgcjbidiffgdjijgghffibcbaaihefhigdfhgjeghfcjedgdicjchcjggbfijejfbdaaicefdeaejfcfjjaebhehidgfhiagieieihbbijhdeaidjgecgbcebeafdhaiecfgajcbafiiccfjjjhjfghihcgaahibdffabgbaciaijgccbgibdadjeehbabfjffcfheccchdejcfcdefdjagiidghggahfddjiaiddfdijeejjfabdacibafgiedddajcgeeafbhajhhbjcechgbijehdcfbaedjcbbceijiaiecjjjddegjfeidabiheeaaechfjdjficeadjdegihegfafhgbjdheabhadfagfhfjjdcjgdghijeggiifedjchadfcaccbgjfehifehjahiccedcfdbdfbbfiafaeijjhheeeigcbibgabbgiagaffdjjbfbbhbgffbcjciebdigghhfjebfacgbhfbgjggabcahecjcfjhbccjdhjhbbfiegfgbfggbbjjgadggibhegbcechdgbdjgicgebcagcfdhdabjefebfhciicedaghdfjcagdcigihdjhahgbidhgjaegfbcggdhigfjgbifjagddfaibgaejfgicidfcdihdcaajhheiabiacdhbaihabdbfbgacjaeaghiabijjdccddfbdiijeffiaaffbgjgjegbfbiecifacihbibhbfegaefhedegffdgdfdcgiadfhbaebjgiiehebbifgbhfehbfgagjfjacidehfcjbccbchhieciaceaicedehiejidjaggefjfbaigaahefdbhbdbigfhdefgeidcgjddhggfcdbfhabcijchbfedjdfjaijffbiefjbdadjcaggeghaacijjgiiicihcbhfafhbadjadigaidadjghijigaegjgaeffdbbiaffghjihcgebdhgdhghjiiadejgghfgddgdefaaifghjajbdjfjefeadadadccedjjdchbjgcjifbhihdhbaihigijbijhbhfjgffjhbdehjjifcjhcacjjcjfghdibifjgcfhadiifieaciaejjdieadichbiiajcfgaeibfiiiibhhfhecfbebbhhicegabcjjgbhiacbhehgjfdaihgigabffhfbdaibgehiibjjfdijfhcgbcbjafdjddccgiiiadcdjjjaaccdighghgdebejbihicgbegcijcegchhdfijffdadbcjdigfbjgeiageddhcgefbdbahjjcfbcejedfgbcgiafaedgbiheifigahbicejhhcbcfcddadeihhchceigidfcagdjfgcbccgcabbibjeaceibfcjiafaajjdecibefgfhcgeedeibiacjgfgbiecbdifecgjajeicbiffdijcfjhgdbfaegdicigdajeebjdaidjeiagffdiijdgbabfcebjadacihjafbgaiaafgdgcihbegchibhhijgjccefgggigddfihjjdijhieceijjcgiibeihgbjeagdfdchhedjjdcfbbeicfdggfediiiaaejjjcagiiejcgijfbjfahgefffegcaccabcegdihighiffhcijcaigiheebjiggbhhbijcdjgdefcdjjicbahgiihijdejhjdbjfgdaafahcigfjjdbahhjicbgfjfcfeaihcfcecggefbggbagbjiadhdejagedhbajdhbdbebcfcfchdefabjcfdjhbgbidfghgdhajibjcchdbcafcahdieigfefebdajddbefbdghbcieeehfeifdbagfiaicbeghiafbgacegajjadbiedfjiijbeeagdaedfijicbjbhbffjgcbebjbjffdgddjjfeeaheheegbjihgfddcicbadaaehhgcjcfhidiedddjbabdcjdhbdjcciehdibdiijdihdicebiaeddjadaegdgehebdigchajeddiaiiahdiajffhdffjddaghacacacaicbaeebjgcecededfccabeegfbfbceajccjgdbedbehcedchjcjfdgiacjdbghefiehidcfbdehhcdgjbcibbahhiehhcfibgehjghbbgdhaedhfciejabcjbfihedcehfjcgdghcecbbggaecbeicdjiebgccjhfcdihjdgbigjdffdecahagichbfchfdgajegcaedjbjidaaheicfidhjbhbgehjbgcjabfegbgegbbccjjdiahhjejeabfjegbhjiafcgijhgiicgdadejcjfjheejhefaaahifdafaiebcjfecgbcibjbghdbidfhaafcbeicibdheahfjhbfdhfggebfaeeiaccbdhdbecfhfaigjjiihchccgbghcdfaiffachhejceiheadagiihfgiaffbfdecbjfjjfecfcicidhjijeeggcjdefjbbiieagjbffggiggafijdcjeeibghegciihafjjcgdcecefjccfgbigehhdicejceahechabfheffbhajgdceibbjaccehhjjjaacbdaadadhajahghhdbihdfjeeehbcfegaggdbeggbaidefiibbdfhffcccbhighhbbccfijaffdacdfcahbaeeghddedbdchgddjhigbggejdejjbchecbcfbcacfhdfbghcahefecfgfffdccdeeeajiaajiechgbaibbffdcgfiejehigbabafeadgbdjcgbhfiihcfdcidcbcffacaihjefcifdbcijabjfbhgbiiafiibfgbfdcgghideaedfccjijifficaegdcbcdebhfbgeigbegjdhjehabieajdjfdibfccaffadajbadheabbjgehafeeejehahbbehffbdcgefebffihbhdfbgiaibceeedhdjfhhbiebhhhccccjihiijgfifjhfifacjdahdaiiicehibfbgeabefjdeeiebhbchdiaihdejfbgbgjijjgcbafibiahhdeddfhfifbfchdbfhhdhcjhajabjgajibbefehfachecejfceeejiieddgieiaijidjjjjihhcejedfaahfghibbhfegbghciijeehigbedccdjeghafgdajehbifdiihcfidfgjebfcgfdeiahheifbgbfjcfijhgijdbhjhifhhghfecafhebabgfgdbdfdgddgfeejceaejbgaejihcjihggbgccgebjdagjjbiefjccechefebghdechiecaiifibjgbeffehddgcjdggcbjebdaicbcadefebbgebicdhghhcfhidhcejhcbgachdhibggidajceghhfichdicddhabdhjigagbhdghbigdiijfiiaieeegegibbejjabfcifjbbecibbeibdicadfbbcjaiiajejbjdgibbgeffhecgfhfgahichijdhbbeiajdcjeajgbeccdhegcedbdbcebfcabfgheiaiehgegidgbahbgabddbhiijdecdhhdcgjbhgiegafjgghcjcafdieecffbiifiedciaffcjgfbecdafbhcajbafabgjbgcajfifchdbhbicbifcbghgjcjhjfifjadchjcifhbihgcfiaeaiegcdddjgceheifefcabaeiaaiibiabdabjiaejchhahgdbacgiahfbbcggciefgjfdahfcgfcaahigddcdddjfebhjbicffgdgjgehfbahcebffbcdehjjceccejbceejfgajjjhagiaicfdhcijchjfdbebjicgdhehigdcebgfigdhibhjgegfhijgjjajgbejijajaaaejcaafjffdjejihggcheegcjaihgcagjjihcjeccdhgaccedbajejifihehjababcigaehaibaaiejgdheieiebafifejicjgbjdhcgdibadceijahdedhiaeafbbhddahbdfhcgefcicghdhjifhgfbifcedaheefjdejhggdbdgacjgibfabigiajjcaceafjiadicbbcgjhehbhcehcbdiaeijdgifhaghggdfcibjhicciijaeiffgbbjabddfjaedahafeehjhifdedgjjafbjaadihcbjfhjgjhgbdfdeciieibecjdfcbejfadccjdafbffhcabbcfeadadeegjihjgijgeihdejeeedjhcffihadiiagfiijejdbbgghebfdhacjhjjdbaieibbidjhjchhcgedfjcjcjedeajchcebfccagfeeiafhccfjaeibghhgacheacghhihgahagidgahibdhgdafbiegbjhjabeibhjeejhchhaacffhabbbebibaejajieibbfhjfieheibahhehfjjadeieecihibchcgbcehfjbfhhgiibdhhjfgahiiebaihhciiifbcejbidjjiebfjjahbafbaeiajgbjecgiigecfejjahecjgiegdhcjijbbfdjhjbigfedgbijebcghaaiffihaffcabefddfhjgghchchdfffcbaijefeggahficiggjhebffeeiccbfcdeefdfijgagfgaahbfjjabcgdhcjfaijcggcgfecccfbhbihaifiedhbdcaiadgfeeeggcefbadifibfaeabfdecfhchccbeabjifbccafcjbghfdjbciacfjbidhfccjghdcefeaehcbeebjhdefibgijadbbghiddahjgdcjhhcebbbfiibfeaeibjaaiaigegeedfdefhdeagabjgdjfbicejjaaibejbbffbfgbjgjdjeajadffgbeedafdihfhdgcgbccjfijdiffihcggcbhbjggabagijhifdedgcacdfhbjbhjgejhgiijcjjebbjciaabeaiadhajbbddagggijcjadijfcdadibebjhicfdffjcbifegccgbadedfefhegfeadeiiddiagbiedajdgbbiidieghjhbbbieacjcafgigaecihbchciiaagigjadbffbeahjcbfbhgdcbfjbjicigeacajfhgeigiebdhjdiehbbfghbaifgaeceifjaedjaibjbhihidjddigbjcigdhejiiifgafhhgcdciceihbbifibghddejdahijijchfdcebjajjbiajjfbjfcgjbeidfeegibieceahdbahdiaaehcdgdbigbdcdfecbigjifjaegcgjhegfgjcihdgijjfjfghdbffhdibehjdcjcfbejfffagjacaiigjabahbgeggieediibfdbjhdgbheaaaicidffahdfbhicicgdfiibijdigcfaigbddabibgacjffgbacgjaibghaehfegaejhffbffjejfihgdjjjdifgjgefhdadddhhabdgddhhgdificjbehjigjdijhijfgbaeefgfgbffidcbfiahfficjihahegabhdaahbaecjajgddcjiaajfahaicidbicefbiedachaaijebcjafeaafffhcjaehhigbaehdahiafidaghhijjacbbbcaeaefddhhddegabdfdahjjhjdjfhbjjeiicaeadheedggcjegjaabhcbdcebjfhaijijjacbefdfcfdihgiebijbiecdeghibbgfighbcebdaijgiajiaiefdjejidcihifjhfdgbfibfhbccgihcbcifdjheghbigggeeefgjgcchaiijgcijibiebddidaehedfbbegfdbbjedeaihcggafafhdhijjbaebcchbbjgfdadeahifjejibbhicgeiaeggbegjfejcfggggdafieijfbicbfeiadafdgedcfdiaihhggahfgiidagahecjgeidhgdghiagcadcjbgjiedaedjgjhdcfcahedbccajcdjiccdcajibbehfidaabijehdcicbiicejebigjijaiagffcadfiijdhbijachaigaaehcijebabjahaiibfiijaaihahjfjifjfihdffdehbjchejdacdbcdccfccgcjfafdefedigeebdeghecjaajedehfhaefaffibdcgbfihjifdccahbeacciehacddeaadbcgiggjggaibecidgdgejachhghdihccgccedjfcjaedhehijfbbifjedggadfhiefefbedccjeahccifhhgbaccecedibhbddgfbbbaefecgdjddhdfdhdbgdbeddedieajbjcdfecegiijfecfjcgichjbagecchfcbighhefdedcggeedcdbbjbabhegbffcgegcdebdbebhibccdjbgjbadhjdgcaejdcbdedjjjhjfjddgchcbidhieeeeaiegcbafbajahifcicjibacafjhifbihgjafheffbfbefafagiacgbgdgcdfccchdbggcjechagdehbedbbifegabdgejccabhiijjgiedfighafgbjaagebbbjgdafjcebcjefiighgjbifcjddhgdbjibehhacefbhabebahadbidcfabiihbjjjegfeaacffggdijhjdhghgaddggfbfeihhddjjiefbbdfiebaacgbegdcjbdjjffacdaehfdbfdahejadfecidafbiefjejbageafgijeeafjaebaiejgjifbchgfeebabegcjgfeicjjejjdfedggiahaiecjidebhdejijbjhjijajacdihhebegahijifhggidbgbijdajaeaeeedhcibcjcajfhccdjedcdibfccdbcciiehchiffhhacfbjhjbdidecjjeadafbfiffgbejddghfehafjfebhabagjdfidggiidcieeijhdjfadbaigejaajeehjabfcaeicebfjhbccgdgddcegdjgdeiifdjbcfgfbjfccbdfhadgeihcdbccifcibbjdffdaibeffehajdhieihideaffeaiffjbcgefjficifeffiaegghfigeafhcaahja'
+  )
+);

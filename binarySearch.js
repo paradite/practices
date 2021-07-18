@@ -21,6 +21,24 @@ const recurse = (nums, target, start, end) => {
   }
 };
 
+const recurse = (input, target, start, end) => {
+  if (start > end) {
+    return currMax ? currMax : -1;
+  }
+  const mid = Math.ceil((start + end) / 2);
+  const midValue = getValue(mid, input);
+  if (midValue < target) {
+    if (!currMax || mid < currMax) {
+      currMax = mid;
+    }
+    return recurse(input, target, start, mid - 1);
+  } else if (midValue > target) {
+    return recurse(input, target, mid + 1, end);
+  } else {
+    return mid;
+  }
+};
+
 console.log(search([9], 9));
 console.log(search([-1, 9], 9));
 console.log(search([-1, 9, 12], 9));
