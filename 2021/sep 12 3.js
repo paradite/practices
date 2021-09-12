@@ -22,17 +22,13 @@ var maxProduct = function (s) {
   let ans = 0;
   for (let i = 0; i < arr.length; i++) {
     const [chs1, bits1] = arr[i];
-    // console.log('TCL ~ chs1, bits1', chs1, bits1);
     for (let j = i + 1; j < arr.length; j++) {
       const [chs2, bits2] = arr[j];
-      // console.log('TCL ~ chs2, bits2', chs2, bits2);
-      // console.log('TCL ~ bits1 | bits2', bits1 | bits2);
       if ((bits1 & bits2) === 0) {
         ans = Math.max(ans, chs1.length * chs2.length);
       }
     }
   }
-  // console.log('TCL ~ arr', arr);
   return ans;
 };
 
