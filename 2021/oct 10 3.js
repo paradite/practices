@@ -116,69 +116,98 @@ BinaryHeap.prototype = {
   },
 };
 
-// tests
+var StockPrice = function () {
+  this.minHeap = new BinaryHeap(
+    (a) => a.value,
+    (a) => {
+      return a.id;
+    },
+    'value'
+  );
+  this.maxHeap = new BinaryHeap(
+    (a) => -a.value,
+    (a) => {
+      return a.id;
+    },
+    'value'
+  );
+  this.currentTime = 0;
+  this.currentPrice = 0;
+};
 
-const minHeap = new BinaryHeap(
-  (a) => a.value,
-  (a) => {
-    return a.id;
-  },
-  'value'
-);
+/**
+ * @param {number} timestamp
+ * @param {number} price
+ * @return {void}
+ */
+StockPrice.prototype.update = function (timestamp, price) {
+  if (timestamp >= this.currentTime) {
+    this.currentTime = timestamp;
+    this.currentPrice = price;
+  }
+  if (this.minHeap.map[timestamp] >= 0) {
+    if (price >= this.minHeap.content[this.minHeap.map[timestamp]].value) {
+      this.minHeap.increaseKey(timestamp, price);
+    } else {
+      this.minHeap.decreaseKey(timestamp, price);
+    }
+    if (price >= this.maxHeap.content[this.maxHeap.map[timestamp]].value) {
+      this.maxHeap.decreaseKey(timestamp, price);
+    } else {
+      this.maxHeap.increaseKey(timestamp, price);
+    }
+  } else {
+    this.minHeap.push({
+      id: timestamp,
+      value: price,
+    });
+    this.maxHeap.push({
+      id: timestamp,
+      value: price,
+    });
+  }
+};
 
-minHeap.push({
-  id: 1,
-  value: 1,
-});
+/**
+ * @return {number}
+ */
+StockPrice.prototype.current = function () {
+  return this.currentPrice;
+};
 
-minHeap.push({
-  id: 2,
-  value: 1000,
-});
+/**
+ * @return {number}
+ */
+StockPrice.prototype.maximum = function () {
+  return this.maxHeap.peak().value;
+};
 
-minHeap.push({
-  id: 3,
-  value: 2,
-});
+/**
+ * @return {number}
+ */
+StockPrice.prototype.minimum = function () {
+  return this.minHeap.peak().value;
+};
 
-minHeap.push({
-  id: 4,
-  value: 200,
-});
-
-minHeap.decreaseKey(4, 1);
-minHeap.increaseKey(1, 100);
-
-minHeap.push({
-  id: 5,
-  value: 23,
-});
-
-minHeap.increaseKey(5, 1020);
-
-while (minHeap.peak()) {
-  console.log(minHeap.pop());
-}
-
-const minHeap2 = new BinaryHeap(
-  (a) => a[0],
-  (a) => {
-    return a[1];
-  },
-  '0'
-);
-
-minHeap2.push([1000, 1]);
-minHeap2.push([4, 2]);
-minHeap2.push([200, 3]);
-minHeap2.decreaseKey(3, 2);
-minHeap2.push([1, 4]);
-minHeap2.push([254, 5]);
-minHeap2.increaseKey(4, 500);
-minHeap2.increaseKey(3, 120);
-minHeap2.decreaseKey(4, 30);
-minHeap2.push([1200, 6]);
-
-while (minHeap2.peak()) {
-  console.log(minHeap2.pop());
-}
+/**
+ * Your StockPrice object will be instantiated and called as such:
+ * var obj = new StockPrice()
+ * obj.update(timestamp,price)
+ * var param_2 = obj.current()
+ * var param_3 = obj.maximum()
+ * var param_4 = obj.minimum()
+ */
+// var obj = new StockPrice();
+// obj.update(3, 102);
+// obj.update(5, 95);
+// obj.update(5, 109);
+// obj.update(3, 2000);
+// obj.update(10, 50);
+// obj.update(5, 6000);
+// obj.update(13, 20);
+// obj.update(3, 50);
+// obj.update(16, 100);
+// obj.update(11, 3500);
+// obj.update(10, 9999);
+// console.log(obj.maximum());
+// console.log(obj.minimum());
