@@ -6,7 +6,7 @@
     {
       "label": "node",
       "type": "shell",
-      "command": "node '${file}'",
+      "command": "/Users/paradite/.nvm/versions/node/v16.13.1/bin/node '${file}'",
       "group": {
         "kind": "build",
         "isDefault": true
