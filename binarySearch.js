@@ -9,20 +9,13 @@ var search = function (nums, target) {
 
 var searchByValue = function (nums, target) {
   let currMax = undefined;
-  const getValue = (index, arr) => {
-    return arr[index];
-  };
 
   const recurseByValue = (input, target, start, end) => {
     if (start > end) {
       return currMax ? currMax : -1;
     }
     const mid = Math.ceil((start + end) / 2);
-    const midValue = getValue(mid, input);
-    // console.log('TCL ~ mid', mid);
-    // console.log('TCL ~ midValue', midValue);
-    // console.log('TCL ~ target', target);
-    // console.log('TCL ~ midValue < target', midValue < target);
+    const midValue = input[mid];
     if (midValue < target) {
       if (currMax === undefined || midValue > currMax) {
         currMax = midValue;
